@@ -1,37 +1,32 @@
+// Create a class Person with the following properties (name, age). 
+// After creating an instance the age of a person should be incremented by 1 every second.
 
 class Person {
-  constructor(name, age) {
+
+  constructor(name, age, interval) {
     this.name = name;
     this.age = age;
+    this.addYear(this.age);
   }
 
-  get getAge() {
-    return this.addYear()
-      .then(age => {
-        this.age = age;
-        console.log(`${this.name}'s age is ${age}`);
-      })
-      .catch(err => console.log('error', err));
+  addYear(age){
+    this.interval = setInterval(()=>{
+          this.age++;
+        }, 1000)
   }
 
-  addYear() {
-    return new Promise((resolve, reject) => {
-      if (this.age) {
-        setTimeout(() => {
-          resolve(this.age + 1);
-        }, 250);
-      } else {
-        reject('The age is not found');
-      }
-    });
+  stopAdding(){
+    clearInterval(this.interval);
   }
+
 }
 
-const brad = new Person('Brad', 28);
 
-setInterval(() => {
-  brad.getAge;
-}, 3000);
+var brad = new Person("Brad", 35);
+
+setTimeout(()=>{
+        console.log(`${brad.name} is ${brad.age} years old`);
+  }, 1000)
 
 
 
@@ -43,7 +38,7 @@ let persons = [];
 
 for(let i = 0; i < 4; i++){
 
-  let newPerson = new Person(faker.name.firstName(), Math.floor(Math.random() * (100 - 0 + 1) ) + 0)
+  let newPerson = new Person(faker.name.firstName(), Math.floor(Math.random() * 50) + 1)
   persons.push(newPerson);
 }
 
@@ -53,19 +48,31 @@ console.log(persons);
 // Function that checks every second the age of each person in the array and removes a person from the array whenever age >=40.
 
 
-let checkAge = function(){
+function checkAge(){
 
-    return new Promise((resolve, reject) => {
-        persons.forEach((item, index) =>{
-          if (item.age >=40) {
-            resolve(persons.splice(index, 1))   
-          }
-        })
-          
+  persons.forEach((item, index) =>{
+
+    if (item.age >=40) {
+        removePerson(item, index);
+      }
   })
 }
 
 setInterval(checkAge, 1000);
+
+
+
+function removePerson(item, index){
+
+  console.log(`${item.name}'s ${item.age} before stopAdding()`);
+  item.stopAdding();
+  console.log(`${item.name} was removed`);
+  persons.splice(index, 1)
+  
+
+  setTimeout(()=>{ console.log(`${item.name} is still ${item.age}`)}, 3000);
+
+}
 
 
 
@@ -74,11 +81,10 @@ setInterval(checkAge, 1000);
 
 function addPerson(){
 
- let newPerson = new Person(faker.name.firstName(), Math.floor(Math.random() * (100 - 0 + 1) ) + 0)
+ let newPerson = new Person(faker.name.firstName(), Math.floor(Math.random() * 50) + 1)
   persons.push(newPerson);
-
- setInterval(addPerson, 2000);
+  console.log(`${newPerson.name} was added`)
 
 }
 
-addPerson();
+setInterval(addPerson, 2000);
