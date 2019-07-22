@@ -6,16 +6,16 @@ class Person {
   constructor(name, age, interval) {
     this.name = name;
     this.age = age;
-    this.addYear(this.age);
+    this.grow(this.age);
   }
 
-  addYear(age){
+  grow(age){
     this.interval = setInterval(()=>{
           this.age++;
         }, 1000)
   }
 
-  stopAdding(){
+  stopGrowing(){
     clearInterval(this.interval);
   }
 
@@ -64,8 +64,8 @@ setInterval(checkAge, 1000);
 
 function removePerson(item, index){
 
-  console.log(`${item.name}'s ${item.age} before stopAdding()`);
-  item.stopAdding();
+  console.log(`${item.name}'s ${item.age} before stopping to grow`);
+  item.stopGrowing();
   console.log(`${item.name} was removed`);
   persons.splice(index, 1)
   
